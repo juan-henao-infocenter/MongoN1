@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
           alt={product.title}
           className="card-img-top"
         />
-        <div className="card-body">
+        <div className="card-body d-flex flex-column justify-content-between align-items-center">
           <h5 className="card-title">{product.title}</h5>
           <p className="card-text">{product.description}</p>
           <p className="card-text">Precio: ${product.price}</p>

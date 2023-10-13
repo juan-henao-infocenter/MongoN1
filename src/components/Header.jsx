@@ -1,38 +1,53 @@
-import React from 'react';
+import React from "react";
+import { FaStore } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container">
-          <img
-            src="../public/logo192.png" // Coloca aquí la ruta de tu logo
-            width="30"
-            height="30"
-            alt="Logo"
-            className="d-inline-block align-top"
-          />
-          Mi Tienda
+    <nav className="navbar navbar-expand-lg">
+      <div className="container-fluid">
+        <a className="navbar-brand  text-white fs-3" href="#">
+          <FaStore />
+        </a>
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav mr-auto">
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-                Productos
+              <a className="nav-link active text-white" aria-current="page" href="#">
+                Home
+              </a>
             </li>
             <li className="nav-item">
-                Categorías
+              <a className="nav-link text-white" href="#">
+                Link
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link disabled text-white" aria-disabled="true">
+                Disabled
+              </a>
             </li>
           </ul>
-            <i className="fas fa-shopping-cart"></i>
+          <form className="d-flex" role="search">
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button className="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
         </div>
       </div>
     </nav>
