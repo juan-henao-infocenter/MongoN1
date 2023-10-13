@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/MongoN1/static/css/main.6bdab2d8.css",
+    "main.css": "/MongoN1/static/css/main.eba6c843.css",
     "main.js": "/MongoN1/static/js/main.6ffb3689.js",
     "index.html": "/MongoN1/index.html",
-    "main.6bdab2d8.css.map": "/MongoN1/static/css/main.6bdab2d8.css.map",
+    "main.eba6c843.css.map": "/MongoN1/static/css/main.eba6c843.css.map",
     "main.6ffb3689.js.map": "/MongoN1/static/js/main.6ffb3689.js.map"
   },
   "entrypoints": [
-    "static/css/main.6bdab2d8.css",
+    "static/css/main.eba6c843.css",
     "static/js/main.6ffb3689.js"
   ]
 }
