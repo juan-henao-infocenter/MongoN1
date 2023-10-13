@@ -1,13 +1,14 @@
 import React from "react";
 import { FaStore } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <nav className="navbar navbar-expand-lg">
-      <div className="container-fluid">
-        <a className="navbar-brand  text-white fs-3" href="#">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
+        <Link to="/" className="navbar-brand">
           <FaStore />
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -22,19 +23,14 @@ const Header = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active text-white" aria-current="page" href="#">
+              <Link to="/" className="nav-link">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-white" href="#">
-                Link
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link disabled text-white" aria-disabled="true">
-                Disabled
-              </a>
+              <Link to="/create-product" className="nav-link">
+                Create Product
+              </Link>
             </li>
           </ul>
           <form className="d-flex" role="search">

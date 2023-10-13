@@ -1,48 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ProductCard from "./components/ProductCard";
+import ProductList from "./components/ProductList";
+import ProductForm from "./components/ProductForm";
 import Header from "./components/Header";
 function App() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.escuelajs.co/api/v1/products")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setProducts(
-          data.filter((d) => d.images.every((i) => i.includes("http")))
+    const fetchProducts = fetch('https://api.escuelajs.co/api/v1/products')
+      .then((response) => response.json());
+
+    const fetchCategories = fetch('https://api.escuelajs.co/api/v1/categories')
+      .then((response) => response.json());
+
+    Promise.all([fetchProducts, fetchCategories])
+      .then(([productsData, categoriesData]) => {
+        console.log('Productos:', productsData);
+        console.log('Categorías:', categoriesData);
+
+        const filteredProducts = productsData.filter((product) =>
+          product.images.every((image) => image.includes('http'))
         );
+
+        setProducts(filteredProducts);
+        setCategories(categoriesData);
       })
-      .catch((error) => console.error("Error:", error))
+      .catch((error) => {
+        console.error('Error:', error);
+      })
       .finally(() => {
         setLoading(false);
       });
   }, []);
 
   return (
-    <div className="bg-body-secondary text-white">
-      <header className="bg-dark text-light">
-        <Header />
-      </header>
-      <div className="container my-5">
-        {loading ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="sr-only"></span>
+    <Router>
+      <div className="bg-body-secondary text-white h-100">
+        <header className="bg-dark text-light">
+          <Header />
+        </header>
+        <div className="container my-5">
+          {loading ? (
+            <div className="d-flex justify-content-center align-items-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only"></span>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="row">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
+          ) : (
+            <Routes>
+              <Route path="/" element={<ProductList products={products} />} />
+              <Route path="/create-product" element={<ProductForm categories={categories} />} />
+            </Routes>
+          )}
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
