@@ -1,0 +1,9 @@
+.card {
+    transition: transform 0.2s, box-shadow 0.2s; /* Agregar una transición para transformar y sombra */
+    cursor: pointer; /* Cambiar el cursor a una mano al pasar el mouse */
+  }
+  
+  .card:hover {
+    transform: scale(1.05); /* Hacer que la tarjeta sea un 5% más grande al pasar el mouse */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Agregar una sombra al pasar el mouse */
+  }
