@@ -13,8 +13,8 @@ const ProductList = () => {
   useEffect(() => {
     const query = queryString.parse(location.search);
     const filter = query.search || "";
-    const offset = (currentPage - 1) * 20; // 20 productos por página (valor predeterminado)
-    const limit = 20; // Valor predeterminado para la cantidad de productos por página
+    const offset = (currentPage - 1) * 15; // 20 productos por página (valor predeterminado)
+    const limit = 15; // Valor predeterminado para la cantidad de productos por página
     const url = "https://api.escuelajs.co/api/v1/products";
     console.log(
       "--------------------------------------------------------------------------------antes del llamado--------------------------------------------"
@@ -48,12 +48,14 @@ const ProductList = () => {
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   // Función para ir a la página siguiente
   const goToNextPage = () => {
       setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
