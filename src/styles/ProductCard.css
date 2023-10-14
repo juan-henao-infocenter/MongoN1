@@ -1,9 +1,20 @@
 .card {
     transition: transform 0.2s, box-shadow 0.2s; /* Agregar una transición para transformar y sombra */
     cursor: pointer; /* Cambiar el cursor a una mano al pasar el mouse */
+    text-decoration: none!important; /* Elimina el subrayado del texto */
   }
   
   .card:hover {
     transform: scale(1.05); /* Hacer que la tarjeta sea un 5% más grande al pasar el mouse */
     box-shadow: 0px 0px 10px rgb(41, 41, 41); /* Agregar una sombra al pasar el mouse */
+    text-decoration: none!important; /* Elimina el subrayado incluso cuando pasas el mouse sobre el enlace */
   }
+
+  /* Agrega este estilo CSS para eliminar el subrayado del texto dentro del enlace */
+a {
+  text-decoration: none; /* Elimina el subrayado del texto */
+}
+
+a {
+  text-decoration: none; /* Elimina el subrayado incluso cuando pasas el mouse sobre el enlace */
+}
