@@ -7,20 +7,34 @@ const ProductList = () => {
   const location = useLocation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  const [totalPages, setTotalPages] = useState(1); // Total de páginas
 
   useEffect(() => {
     const query = queryString.parse(location.search);
     const filter = query.search || "";
-
-    // Luego, realiza la llamada al API utilizando el filtro
-    fetch(`https://api.escuelajs.co/api/v1/products/?title=${filter}`)
+    const offset = (currentPage - 1) * 20; // 20 productos por página (valor predeterminado)
+    const limit = 20; // Valor predeterminado para la cantidad de productos por página
+    const url = "https://api.escuelajs.co/api/v1/products";
+    console.log(
+      "--------------------------------------------------------------------------------antes del llamado--------------------------------------------"
+    );
+    // Luego, realiza la llamada al API utilizando el filtro, offset y limit
+    fetch(
+      `${url}${
+        filter === "" ? "?tilte=" + filter + "&" : ""
+      }offset=${offset}&limit=${limit}`
+    )
       .then((response) => response.json())
-      .then((productsData) => {
-        const filteredProducts = productsData.filter((e) =>
-          e.images.every((i) => i.includes("http"))
+      .then((response) => {
+        console.log(
+          "--------------------------------------------------------------------------------despues del llamado--------------------------------------------"
         );
+        console.log(response);
 
-        setProducts(filteredProducts);
+        setProducts(response);
+        // Calcular el número total de páginas según el total de productos y el límite
+        setTotalPages(Math.ceil(response.length / limit));
       })
       .catch((error) => {
         console.log("Error:", error);
@@ -28,7 +42,19 @@ const ProductList = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [location.search]);
+  }, [location.search, currentPage]); // Agregar currentPage a las dependencias
+
+  // Función para ir a la página anterior
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Función para ir a la página siguiente
+  const goToNextPage = () => {
+      setCurrentPage(currentPage + 1);
+  };
 
   return (
     <div className="row">
@@ -47,8 +73,23 @@ const ProductList = () => {
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className="page-item">
+                <button className="page-link" onClick={goToPreviousPage}>
+                  Previous
+                </button>
+              </li>
+              <li className="page-item">
+                <button className="page-link" onClick={goToNextPage}>
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </>
       )}
+      ;
     </div>
   );
 };
