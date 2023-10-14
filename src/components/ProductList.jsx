@@ -15,14 +15,17 @@ const ProductList = () => {
     const filter = query.search || "";
     const offset = (currentPage - 1) * 15; // 20 productos por página (valor predeterminado)
     const limit = 15; // Valor predeterminado para la cantidad de productos por página
-    const url = "https://api.escuelajs.co/api/v1/products";
+    const url = "https://api.escuelajs.co/api/v1/products/";
     console.log(
       "--------------------------------------------------------------------------------antes del llamado--------------------------------------------"
     );
+    console.log(`${url}?${
+      filter === "" ? "":"tilte=" + filter + "&" 
+    }offset=${offset}&limit=${limit}`)
     // Luego, realiza la llamada al API utilizando el filtro, offset y limit
     fetch(
-      `${url}${
-        filter === "" ? "?tilte=" + filter + "&" : ""
+      `${url}?${
+        filter === "" ? "":"title=" + filter + "&" 
       }offset=${offset}&limit=${limit}`
     )
       .then((response) => response.json())
@@ -42,7 +45,7 @@ const ProductList = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [location.search, currentPage]); // Agregar currentPage a las dependencias
+  }, [location, currentPage]); // Agregar currentPage a las dependencias
 
   // Función para ir a la página anterior
   const goToPreviousPage = () => {
