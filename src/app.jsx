@@ -1,53 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProductList from "./components/ProductList";
 import ProductForm from "./components/ProductForm";
 import ProductDetail from "./components/ProductDetail";
-import queryString from "query-string";
 
 function App() {
-  const location = useLocation();
-  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    const query = queryString.parse(location.search);
-    const filter = query.search || "";
-    console.log(filter);
-    const productsUrl = "https://api.escuelajs.co/api/v1/products";
-    console.log(`${productsUrl}${filter ? "/?title=" + filter : ""}`);
-    const fetchProducts = fetch(
-      `${productsUrl}${filter ? "/?title=" + filter : ""}`
-    ).then((response) => response.json());
-
-    const fetchCategories = fetch(
-      "https://api.escuelajs.co/api/v1/categories"
-    ).then((response) => response.json());
-
-    Promise.all([fetchProducts, fetchCategories])
-      .then(([productsData, categoriesData]) => {
-        // let filteredProducts = [];
-
-        // productsData.forEach(async (element) => {
-        //   try {
-        //     const imageResponse = await fetch(element.images[0]);
-        //     if (imageResponse.status === 200) {
-        //       filteredProducts.push(element);
-        //     }
-        //   } catch (error) {
-        //     console.log("Error al cargar imagen:", error);
-        //   }
-        // });
-
-        const filteredProducts = productsData.filter((e) =>
-          e.images.every((i) => i.includes("http"))
-        );
-
-        console.log("Productos:", filteredProducts);
+    fetch("https://api.escuelajs.co/api/v1/categories")
+      .then((response) => response.json())
+      .then((categoriesData) => {
         console.log("Categorías:", categoriesData);
-        setProducts(filteredProducts);
         setCategories(categoriesData);
       })
       .catch((error) => {
@@ -56,7 +21,7 @@ function App() {
       .finally(() => {
         setLoading(false);
       });
-  }, [location.search]);
+  }, []);
 
   return (
     <div className="container my-5">
@@ -74,7 +39,7 @@ function App() {
         <Routes>
           <Route
             path="/MongoN1"
-            element={<ProductList products={products} />}
+            element={<ProductList  />}
           />
           <Route
             path="/MongoN1/create-product"
