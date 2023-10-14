@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProductList from "./components/ProductList";
 import ProductForm from "./components/ProductForm";
+import ProductDetail from "./components/ProductDetail";
 import queryString from "query-string";
 
 function App() {
@@ -16,10 +17,10 @@ function App() {
     const filter = query.search || "";
     console.log(filter);
     const productsUrl = "https://api.escuelajs.co/api/v1/products";
-    console.log(`${productsUrl}/?title=${filter}`);
-    const fetchProducts = fetch(`${productsUrl}/?title=${filter}`).then(
-      (response) => response.json()
-    );
+    console.log(`${productsUrl}${filter ? "/?title=" + filter : ""}`);
+    const fetchProducts = fetch(
+      `${productsUrl}${filter ? "/?title=" + filter : ""}`
+    ).then((response) => response.json());
 
     const fetchCategories = fetch(
       "https://api.escuelajs.co/api/v1/categories"
@@ -27,16 +28,30 @@ function App() {
 
     Promise.all([fetchProducts, fetchCategories])
       .then(([productsData, categoriesData]) => {
-        const filteredProducts = productsData.filter((product) =>
-          product.images.every((image) => image.includes("http"))
+        // let filteredProducts = [];
+
+        // productsData.forEach(async (element) => {
+        //   try {
+        //     const imageResponse = await fetch(element.images[0]);
+        //     if (imageResponse.status === 200) {
+        //       filteredProducts.push(element);
+        //     }
+        //   } catch (error) {
+        //     console.log("Error al cargar imagen:", error);
+        //   }
+        // });
+
+        const filteredProducts = productsData.filter((e) =>
+          e.images.every((i) => i.includes("http"))
         );
+
         console.log("Productos:", filteredProducts);
         console.log("Categorías:", categoriesData);
         setProducts(filteredProducts);
         setCategories(categoriesData);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        console.log("Error:", error);
       })
       .finally(() => {
         setLoading(false);
@@ -47,7 +62,11 @@ function App() {
     <div className="container my-5">
       {loading ? (
         <div className="d-flex justify-content-center align-items-center">
-          <div className="spinner-border text-primary" role="status">
+          <div
+            className="spinner-grow text-dark"
+            style={{ width: "5rem", height: "5rem" }}
+            role="status"
+          >
             <span className="sr-only"></span>
           </div>
         </div>
@@ -60,6 +79,10 @@ function App() {
           <Route
             path="/MongoN1/create-product"
             element={<ProductForm categories={categories} />}
+          />
+          <Route
+            path="/MongoN1/product/:productId"
+            element={<ProductDetail />}
           />
         </Routes>
       )}
