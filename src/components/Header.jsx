@@ -32,12 +32,17 @@ const Header = () => {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <Link to="./MongoN1/" className={`nav-link ${location.pathname === "/MongoN1/" || location.pathname === "/MongoN1" ? "active" : ""}`} onClick={()=>setSearchText("")}>
-                Home
+                Inicio
               </Link>
             </li>
             <li className="nav-item">
               <Link to="./MongoN1/create-product" className={`nav-link ${location.pathname.includes('create-product') ? "active" : ""}`} onClick={()=>setSearchText("")}>
-                Create Product
+                Crear producto
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="./MongoN1/login" className={`nav-link ${location.pathname.includes('create-product') ? "active" : ""}`} onClick={()=>setSearchText("")}>
+                Iniciar sesión
               </Link>
             </li>
           </ul>

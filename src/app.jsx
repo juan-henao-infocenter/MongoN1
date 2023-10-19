@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProductList from "./components/ProductList";
 import ProductForm from "./components/ProductForm";
 import ProductDetail from "./components/ProductDetail";
+import Login from "./components/Login";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -12,11 +13,10 @@ function App() {
     fetch("https://api.escuelajs.co/api/v1/categories")
       .then((response) => response.json())
       .then((categoriesData) => {
-        console.log("Categorías:", categoriesData);
         setCategories(categoriesData);
       })
       .catch((error) => {
-        console.log("Error:", error);
+        console.error ("Error:", error);
       })
       .finally(() => {
         setLoading(false);
@@ -48,6 +48,10 @@ function App() {
           <Route
             path="/MongoN1/product/:productId"
             element={<ProductDetail />}
+          />
+          <Route
+            path="/MongoN1/login"
+            element={<Login />}
           />
         </Routes>
       )}

@@ -9,56 +9,79 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1); // Página actual
   const [totalPages, setTotalPages] = useState(1); // Total de páginas
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const query = queryString.parse(location.search);
     const filter = query.search || "";
     const offset = (currentPage - 1) * 15; // 20 productos por página (valor predeterminado)
     const limit = 15; // Valor predeterminado para la cantidad de productos por página
-    const url = "https://api.escuelajs.co/api/v1/products/";
-    console.log(
-      "--------------------------------------------------------------------------------antes del llamado--------------------------------------------"
-    );
-    console.log(`${url}?${
-      filter === "" ? "":"tilte=" + filter + "&" 
-    }offset=${offset}&limit=${limit}`)
+    const url = process.env.REACT_APP_API_URL;
     // Luego, realiza la llamada al API utilizando el filtro, offset y limit
     fetch(
-      `${url}?${
-        filter === "" ? "":"title=" + filter + "&" 
-      }offset=${offset}&limit=${limit}`
+      `${url}products?${
+        filter === "" ? "" : "tilte=" + filter + "&"
+      }offset=${offset}&limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+      }
     )
-      .then((response) => response.json())
       .then((response) => {
-        console.log(
-          "--------------------------------------------------------------------------------despues del llamado--------------------------------------------"
-        );
-        console.log(response);
-
-        setProducts(response);
-        // Calcular el número total de páginas según el total de productos y el límite
-        setTotalPages(Math.ceil(response.length / limit));
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
       })
-      .catch((error) => {
-        console.log("Error:", error);
+      .then((response) => {
+
+        try {
+          setProducts(response);
+          // Calcular el número total de páginas según el total de productos y el límite
+          setTotalPages(Math.ceil(response.length / limit));
+        } catch (error) {
+          setError(error)
+          console.error("Error de red:", error);
+        }
+      })
+      .catch((er) => {
+        setError(
+          "Hubo un error al cargar el producto. Inténtalo de nuevo más tarde."
+        );
+        console.error("Error:", er);
       })
       .finally(() => {
         setLoading(false);
       });
   }, [location, currentPage]); // Agregar currentPage a las dependencias
 
+  if (error) {
+    return (
+      <div className="container mt-4 text-dark">
+        <div className="row">
+          <div className="col-md-12">
+            <p>{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Función para ir a la página anterior
   const goToPreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   // Función para ir a la página siguiente
   const goToNextPage = () => {
-      setCurrentPage(currentPage + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentPage(currentPage + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -76,7 +99,7 @@ const ProductList = () => {
       ) : (
         <>
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
           <nav aria-label="Page navigation example">
             <ul className="pagination">

@@ -1,26 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://api.escuelajs.co/api/v1/products/${productId}`)
-      .then((response) => response.json())
+    fetch(`${process.env.REACT_APP_API_URL}products/${productId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((data) => {
         setProduct(data);
       })
       .catch((error) => {
+        setError(
+          "Hubo un error al cargar el producto. Inténtalo de nuevo más tarde."
+        );
         console.error("Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [productId]);
 
-  if (!product) {
-    return <div>Cargando...</div>;
+  if (error) {
+    return (
+      <div className="container mt-4 text-dark">
+        <div className="row">
+          <div className="col-md-12">
+            <p>{error}</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const sliderSettings = {
@@ -41,12 +67,27 @@ const ProductDetail = () => {
 
   return (
     <div className="container mt-4 text-dark">
+      {loading ? (
+        <div className="d-flex justify-content-center align-items-center">
+          <div
+            className="spinner-grow text-dark"
+            style={{ width: "5rem", height: "5rem" }}
+            role="status"
+          >
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      ) : (
       <div className="row">
         <div className="col-md-6">
           <Slider {...sliderSettings}>
             {product.images.map((image, index) => (
               <div key={index}>
-                <img src={image} alt={`Product ${index}`} />
+                <img
+                  src={image}
+                  alt={`Product ${index}`}
+                  className="img-fluid"
+                />
               </div>
             ))}
           </Slider>
@@ -56,10 +97,7 @@ const ProductDetail = () => {
           <p>{product.description}</p>
           <p>Precio: ${product.price}</p>
           <div className="d-flex justify-content-evenly">
-            <button
-              onClick={handleAddToCart}
-              className="btn btn-primary"
-            >
+            <button onClick={handleAddToCart} className="btn btn-primary">
               Agregar al carrito
             </button>
             <button onClick={handleBuyNow} className="btn btn-success">
@@ -68,6 +106,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };
