@@ -94,7 +94,8 @@ const ProductDetail = () => {
               ))}
             </Slider>
           </div>
-          <div className="col-md-7">
+          <div className="col-md-1"></div>
+          <div className="col-md-6">
             <h2 className="mt-3">{product.title}</h2>
             <p className="mb-4">{product.description}</p>
             {product.caracteristics && product.caracteristics.length > 0 && (
