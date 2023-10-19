@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const ProductDetail = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
@@ -20,6 +22,7 @@ const ProductDetail = () => {
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {
+            navigate(`/MongoN1/login?redirect=${location.pathname}`);
           }
           throw new Error("Network response was not ok");
         }
