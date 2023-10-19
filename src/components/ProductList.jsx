@@ -23,11 +23,7 @@ const ProductList = () => {
         filter === "" ? "" : "tilte=" + filter + "&"
       }offset=${offset}&limit=${limit}`,
       {
-        method: "GET",
-        headers: {
-          Authorization: localStorage.getItem('token'),
-          'Content-Type': 'application/json',
-        },
+        method: "GET"
       }
     )
       .then((response) => {

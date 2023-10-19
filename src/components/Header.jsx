@@ -36,11 +36,6 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="./MongoN1/create-product" className={`nav-link ${location.pathname.includes('create-product') ? "active" : ""}`} onClick={()=>setSearchText("")}>
-                Crear producto
-              </Link>
-            </li>
-            <li className="nav-item">
               <Link to="./MongoN1/login" className={`nav-link ${location.pathname.includes('create-product') ? "active" : ""}`} onClick={()=>setSearchText("")}>
                 Iniciar sesión
               </Link>

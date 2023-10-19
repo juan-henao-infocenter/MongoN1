@@ -19,6 +19,8 @@ const ProductDetail = () => {
     })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 401) {
+          }
           throw new Error("Network response was not ok");
         }
         return response.json();
@@ -78,34 +80,44 @@ const ProductDetail = () => {
           </div>
         </div>
       ) : (
-      <div className="row">
-        <div className="col-md-6">
-          <Slider {...sliderSettings}>
-            {product.images.map((image, index) => (
-              <div key={index}>
-                <img
-                  src={image}
-                  alt={`Product ${index}`}
-                  className="img-fluid"
-                />
+        <div className="row">
+          <div className="col-md-5">
+            <Slider {...sliderSettings}>
+              {product.images.map((image, index) => (
+                <div key={index}>
+                  <img
+                    src={image}
+                    alt={`Product ${index}`}
+                    className="img-fluid"
+                  />
+                </div>
+              ))}
+            </Slider>
+          </div>
+          <div className="col-md-7">
+            <h2 className="mt-3">{product.title}</h2>
+            <p className="mb-4">{product.description}</p>
+            {product.caracteristics && product.caracteristics.length > 0 && (
+              <div>
+                <h4>Características:</h4>
+                <ul>
+                  {product.caracteristics.map((characteristic, index) => (
+                    <li key={index}>{characteristic}</li>
+                  ))}
+                </ul>
               </div>
-            ))}
-          </Slider>
-        </div>
-        <div className="col-md-6">
-          <h2>{product.title}</h2>
-          <p>{product.description}</p>
-          <p>Precio: ${product.price}</p>
-          <div className="d-flex justify-content-evenly">
-            <button onClick={handleAddToCart} className="btn btn-primary">
-              Agregar al carrito
-            </button>
-            <button onClick={handleBuyNow} className="btn btn-success">
-              Comprar
-            </button>
+            )}
+            <p className="h4 text-success">Precio: ${product.price}</p>
+            <div className="d-flex justify-content-center mt-4">
+              <button onClick={handleAddToCart} className="btn btn-primary m-1">
+                Agregar al carrito
+              </button>
+              <button onClick={handleBuyNow} className="btn btn-success m-1">
+                Comprar
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )}
     </div>
   );

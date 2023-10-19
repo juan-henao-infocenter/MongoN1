@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProductList from "./components/ProductList";
-import ProductForm from "./components/ProductForm";
 import ProductDetail from "./components/ProductDetail";
 import Login from "./components/Login";
 
@@ -40,10 +39,6 @@ function App() {
           <Route
             path="/MongoN1"
             element={<ProductList  />}
-          />
-          <Route
-            path="/MongoN1/create-product"
-            element={<ProductForm categories={categories} />}
           />
           <Route
             path="/MongoN1/product/:productId"
