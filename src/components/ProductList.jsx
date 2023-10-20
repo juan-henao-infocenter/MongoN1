@@ -14,13 +14,14 @@ const ProductList = () => {
   useEffect(() => {
     const query = queryString.parse(location.search);
     const filter = query.search || "";
+    console.log(filter)
     const offset = (currentPage - 1) * 15; // 20 productos por página (valor predeterminado)
     const limit = 15; // Valor predeterminado para la cantidad de productos por página
     const url = process.env.REACT_APP_API_URL;
     // Luego, realiza la llamada al API utilizando el filtro, offset y limit
     fetch(
       `${url}products?${
-        filter === "" ? "" : "tilte=" + filter + "&"
+        filter === "" ? "" : "filter=" + filter + "&"
       }offset=${offset}&limit=${limit}`,
       {
         method: "GET"
