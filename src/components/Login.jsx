@@ -11,24 +11,27 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      const mutation = `mutation {
+        userLogin(email: "usuario2@example.com", password: "contrasena2")
+      }`;
+      
       const queryParams = queryString.parse(location.search);
       const redirect = queryParams.redirect;
       const response = await fetch(
-        process.env.REACT_APP_API_URL + "users/login",
-        {
-          method: "POST",
+        process.env.REACT_APP_API_URL,{
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ query: mutation }),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
 
-        localStorage.setItem("token", data.token);
-
+        localStorage.setItem("token", data.data.userLogin);
+        
         navigate(redirect||'/MongoN1');
       } else {
         console.error("Error al iniciar sesión");

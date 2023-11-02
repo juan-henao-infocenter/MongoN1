@@ -11,25 +11,39 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}products/${productId}`, {
-      method: "GET",
+    const query = `{
+      product(id: "${productId}") {
+        _id
+        reference
+        title
+        price
+        description
+        images
+        caracteristics
+      }
+    }`;
+
+    fetch(process.env.REACT_APP_API_URL, {
+      method: 'POST',
       headers: {
-        Authorization: `${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json',
+        'Authorization': `${localStorage.getItem("token")}` 
       },
+      body: JSON.stringify({ query }),
     })
       .then((response) => {
-        if (!response.ok) {
-          if (response.status === 401) {
+        return response.json();
+      })
+      .then((response) => {
+        if (response.errors) {
+          if (response.errors.some(e=>e.message === 'Unauthorized')) {
             navigate(`/MongoN1/login?redirect=${location.pathname}`);
           }
           throw new Error("Network response was not ok");
         }
-        return response.json();
-      })
-      .then((data) => {
-        setProduct(data);
+        setProduct(response.data.product);
       })
       .catch((error) => {
         setError(
