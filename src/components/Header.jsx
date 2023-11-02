@@ -6,11 +6,20 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+
+  console.log(localStorage.getItem("token"))
+
   const handleSearch = (e) => {
     e.preventDefault();
 
     navigate(`/MongoN1?search=${searchText}`);
   };
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/MongoN1');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark text-white">
       <div className="container">
@@ -36,9 +45,13 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="./MongoN1/login" className={`nav-link ${location.pathname.includes('create-product') ? "active" : ""}`} onClick={()=>setSearchText("")}>
+            {localStorage.getItem("token") ? (
+            <Link to="./MongoN1" className={`nav-link`} onClick={()=>handleLogout()}>
+                Cerrar sesión
+              </Link>):(
+              <Link to="./MongoN1/login" className={`nav-link ${location.pathname.includes('login') ? "active" : ""}`} onClick={()=>setSearchText("")}>
                 Iniciar sesión
-              </Link>
+              </Link>)}
             </li>
           </ul>
           <form className="d-flex" role="search" onSubmit={handleSearch}>
