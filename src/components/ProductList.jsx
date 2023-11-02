@@ -12,20 +12,35 @@ const ProductList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const query = queryString.parse(location.search);
-    const filter = query.search || "";
-    console.log(filter)
-    const offset = (currentPage - 1) * 15; // 20 productos por página (valor predeterminado)
-    const limit = 15; // Valor predeterminado para la cantidad de productos por página
+    const searchuQeryString = queryString.parse(location.search);
+    const filter = searchuQeryString.search;
+    const offset = (currentPage - 1) * 6;
+    const limit = 6; 
     const url = process.env.REACT_APP_API_URL;
     // Luego, realiza la llamada al API utilizando el filtro, offset y limit
-    fetch(
-      `${url}products?${
-        filter === "" ? "" : "filter=" + filter + "&"
-      }offset=${offset}&limit=${limit}`,
-      {
-        method: "GET"
+
+    const graphqlQuery = `
+    query {
+      products(${filter ? `filter: "${filter}", `:''}limit: ${limit}, offset: ${offset}) {
+        _id
+        title
+        price
+        images
       }
+    }
+  `;
+
+  const requestOptions = {
+    method: "POST", 
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query: graphqlQuery }),
+  };
+
+    fetch(
+      url,
+      requestOptions
     )
       .then((response) => {
         if (!response.ok) {
@@ -36,9 +51,9 @@ const ProductList = () => {
       .then((response) => {
 
         try {
-          setProducts(response);
+          setProducts(response.data.products);
           // Calcular el número total de páginas según el total de productos y el límite
-          setTotalPages(Math.ceil(response.length / limit));
+          setTotalPages(Math.ceil(response.data.products.length / limit));
         } catch (error) {
           setError(error)
           console.error("Error de red:", error);
