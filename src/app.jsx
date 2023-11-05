@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ProductList from "./components/ProductList";
 import ProductDetail from "./components/ProductDetail";
 import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const [categories, setCategories] = useState([]);
@@ -47,6 +48,10 @@ function App() {
           <Route
             path="/MongoN1/login"
             element={<Login />}
+          />
+          <Route
+            path="/MongoN1/Create-Account"
+            element={<Register />}
           />
         </Routes>
       )}

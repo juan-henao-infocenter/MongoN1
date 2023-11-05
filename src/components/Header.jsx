@@ -7,8 +7,6 @@ const Header = () => {
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
 
-  console.log(localStorage.getItem("token"))
-
   const handleSearch = (e) => {
     e.preventDefault();
 
@@ -52,6 +50,12 @@ const Header = () => {
               <Link to="./MongoN1/login" className={`nav-link ${location.pathname.includes('login') ? "active" : ""}`} onClick={()=>setSearchText("")}>
                 Iniciar sesión
               </Link>)}
+            </li>
+            <li className="nav-item">
+            {localStorage.getItem("token") ? (<></>):
+              (
+                <Link to="./MongoN1/Create-Account" className={`nav-link ${location.pathname.includes('Create-Account') ? "active" : ""}`} onClick={()=>setSearchText("")}>Crear cuenta</Link>
+              )}
             </li>
           </ul>
           <form className="d-flex" role="search" onSubmit={handleSearch}>
